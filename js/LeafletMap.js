@@ -10,80 +10,80 @@ function init(){
     // var latlngs = [[23.06, 113.05],[23.07, 113.03],[24.08, 113.05],[23.09, 114.04]];
     // var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
 
-		var url = "http://localhost:8080/geoserver/volunteer/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=volunteer%3Avolunteer&maxFeatures=100&outputFormat=application%2Fjson&WITHIN(GEOM, POLYGON((23.06, 113.05 23.07, 113.03 24.08, 113.05 23.09, 114.04)))";
+// var url = "http://localhost:8080/geoserver/volunteer/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=volunteer%3Avolunteer&maxFeatures=100&outputFormat=application%2Fjson&WITHIN(GEOM, POLYGON((23.06, 113.05 23.07, 113.03 24.08, 113.05 23.09, 114.04)))";
 
-    var geojson = [
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9230309538,22.5328601327]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9098394332,22.5308440047]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9184338316,22.5283211404]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9001586386,22.5495591260]
-		    }
-		  },
-		  		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9497931782,22.5566469565]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9592382646,22.5339793452]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.9472855028,22.5067787643]
-		    }
-		  },
-		  {
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [113.8875994756,22.5023345019]
-		    }
-		  },
-		];
+//     var geojson = [
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9230309538,22.5328601327]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9098394332,22.5308440047]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9184338316,22.5283211404]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9001586386,22.5495591260]
+// 		    }
+// 		  },
+// 		  		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9497931782,22.5566469565]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9592382646,22.5339793452]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.9472855028,22.5067787643]
+// 		    }
+// 		  },
+// 		  {
+// 		    "type": "Feature",
+// 		    "geometry": {
+// 		      "type": "Point",
+// 		      "coordinates": [113.8875994756,22.5023345019]
+// 		    }
+// 		  },
+// 		];
 
-		var states = [{
-		    "type": "Feature",
-		    "properties": {"party": "Republican"},
-		    "geometry": {
-		        "type": "Polygon",
-		        "coordinates": [[
-					[113.9042260686, 22.5445272920],
-					[113.9268836350,  22.5436866939],
-					[113.9248790544,  22.5255291551],
-					[113.9052404332, 22.5261030047]
-		        ]]
-		    }
-		}];
+// 		var states = [{
+// 		    "type": "Feature",
+// 		    "properties": {"party": "Republican"},
+// 		    "geometry": {
+// 		        "type": "Polygon",
+// 		        "coordinates": [[
+// 					[113.9042260686, 22.5445272920],
+// 					[113.9268836350,  22.5436866939],
+// 					[113.9248790544,  22.5255291551],
+// 					[113.9052404332, 22.5261030047]
+// 		        ]]
+// 		    }
+// 		}];
         // {
 		//     "type": "Feature",
 		//     "properties": {"party": "Democrat"},
@@ -109,32 +109,32 @@ function init(){
         //     properties: properties
         // });
         // var geojsonn = myCircle.asGeojson();
-        var circle = L.circle([ 22.5023345019,113.8875994756], 500).addTo(map);
+        //var circle = L.circle([ 22.5023345019,113.8875994756], 500).addTo(map);
         // var circles = L.geoJson(geojsonn).addTo(map);
 
-        var polygons = L.geoJson(states).addTo(map);
-		var points = L.geoJson(geojson).addTo(map);
-        polygons.eachLayer(function(l){
-			var results = leafletPip.pointsInPolygon(points,l);
-			if(results.length>0){
+        //var polygons = L.geoJson(states).addTo(map);
+	//	var points = L.geoJson(geojson).addTo(map);
+       // polygons.eachLayer(function(l){
+	//		var results = leafletPip.pointsInPolygon(points,l);
+	//		if(results.length>0){
 
-				results.forEach(function(r){
-					console.log(r);
-					r.setOpacity(0.5);
-				})
+	//			results.forEach(function(r){
+	//				console.log(r);
+	//				r.setOpacity(0.5);
+	//			})
 
-			}
-		});
-	var userpoint = L.marker([23, 113]).addTo(map);
-	lc = L.control.locate({
-		position: 'topright',
-		strings: {
-			title: "定位我当前的位置!"
-		},
-		locateOptions: {
-			enableHighAccuracy: true
-		}
-	}).addTo(map);
+	//		}
+	//	});
+	//var userpoint = L.marker([23, 113]).addTo(map);
+	//lc = L.control.locate({
+	//	position: 'topright',
+	////	strings: {
+	//		title: "定位我当前的位置!"
+	//	},
+	//	locateOptions: {
+	//		enableHighAccuracy: true
+	//	}
+	//}).addTo(map);
 	datas = datas.map(function (p) { return [p[0], p[1]]; });
 
 	var heat = L.heatLayer(datas).addTo(map);
