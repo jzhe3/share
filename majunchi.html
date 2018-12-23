@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="css/new_file.css" />
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/new_file.js" ></script>
+	</head>
+<body>
+	<div id="test1">
+			<h2 class="text">
+				问题选择
+			</h2>
+		<form name="form0" method="post" action="">
+			<select style="position:relative;" id="list" onchange="setVar(this);">
+  				<option value="首先检查登录信息是否输入错误，若检查无误后还是不能登录，请联系客服请求修改登录信息">问题一:登录失败怎么办</option>
+  				<option value="根据系统首页的提示信息填写个人信息，填写完成后点击注册即可">问题二:怎么注册</option>
+  				<option value="先停止志愿活动，再与组织人员联系">问题三:我在活动中权益受到侵害怎么办</option>
+  				<option value="根据发布的信息选择是集合一起去还是自行前往">问题四:我报名后怎前往志愿活动地点</option>
+			</select>
+				<textarea id ="txta1" name="txta1"></textarea>
+		</form>
+	</div>
+<div id="test2">
+	<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" >
+		联系客服
+	</button>
+</div>
+<div id="test3">
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						联系客服
+					</h4>
+				</div>
+				<div class="modal-body">
+						电话：158561561169<br />
+						微信公众号：03630316<br />
+						qq客服：60316203<br />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						关闭
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
