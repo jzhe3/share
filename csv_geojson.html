@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" >
+        <title>load csv and geojson layer</title>
+    </head>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css"  />
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <style>
+        html,
+        body,
+        #viewDiv{
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/CSVLayer"
+        ], function(Map, MapView, CSVLayer){
+            var map = new Map({
+                basemap: "streets"
+            });
+            const symbol = {
+                type: "simple-marker",
+                path: "M14.5,29 23.5,0 14.5,9 5.5,0z",
+                color: "#7CFC00",
+                outline: {
+                    color: [	128,0,0, 0.7],
+                    width: 0.5
+                },
+                angle: 180,
+                size: 15
+            };
+            const rotationcsvlayer = {
+                type: "simple",
+                symbol: symbol,
+                visualVariables: [
+                    {
+                        type: "rotation",
+                        field: "T_Heading",
+                        rotationType: "geographic"
+                    },{
+                        type: "size",
+                        field: "T_Speed",
+                        minDataValue: 0,
+                        maxDataValue: 60,
+                        minSize: 8,
+                        maxSize: 40
+                    }
+                ]
+            };
+            const url = "https://cxqttkl.github.io/web4gis15/wuhangps-tiny.csv"
+            var csvlayer = new CSVLayer({
+                url: url,
+                copyright: "Wuhan GPS",
+                latitudeField: "Lat",
+                longitudeField: "Long",
+                renderer: rotationcsvlayer
+            });
+            map.add(csvlayer);
+            var view = new MapView({
+                container: "viewDiv",
+                center: [114.3, 30.5],
+                zoom:10,
+                map: map
+            });
+        });
+    </script>
+    <body>
+        <div id="viewDiv"></div>
+    </body>
+</html>
