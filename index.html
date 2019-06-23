@@ -1,53 +1,334 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
-   		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-   		crossorigin=""/>
-		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
-   		integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-		   crossorigin=""></script>
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="css/leafletAPI.css"  />
-		<link rel="stylesheet" href="css/leaflet-geojson-selector.css" >
-		<link rel="stylesheet" href="css/leaflet-search.css" />
-		<link rel="stylesheet" href="assets/css/style.css">
-		<link rel="stylesheet" href="css/leaflet-search.mobile.css" />
-		<link rel="stylesheet" href="css/L.Control.Locate.mapbox.min.css" />
-		<script type="text/javascript" src="js/LeafletMap.js"  ></script>
-		<script type="text/javascript" src="js/leaflet.ChineseTmsProviders.js"></script>
-		<script type="text/javascript" src="js/leaflet-search.js"></script>
-		<script type="text/javascript" src="js/L.Control.Locate.js" ></script>
-		<script type="text/javascript" src="js/leaflet-geojson-selector.js" ></script>
-        <script type="text/javascript" src="js/leaflet-pip.min.js" ></script>
-        <script type="text/javascript" src="js/L.geoJsonFilter.js" ></script>
-        <script type="text/javascript" src="js/leaflet-div-heatmap.js" ></script>
-		<script type="text/javascript" src="js/leaflet-heat.js"></script>
-		<script type="text/javascript" src="js/leaflet-heatmap.js"></script>
-        <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.10000.js"></script>
-        <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
-		<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-		<script src="https://tomorrgod.github.io/share/heatmap.js"></script>
-		<script type="text/javascript" src="assets/js/js2wordcloud.js"></script>
-    
 
-		<title>地图</title>
-	</head>
-	<body onload="init()">
-		<div id="map"></div>
-		<div id="fenxi">	
-		<select id="ciyun_select">
-			<option value ="ciyun_theme">词云(主题)</option>
-			<option value ="ciyun_instruction">词云(介绍)</option>
-			<option value="ciyun_content">词云(内容)</option>
-			<option value="ciyun_demand">词云(要求)</option>
-			<option value="ciyun_close">关闭</option>
-		</select>
-		</div>
-		<div id="container" style="height: 400px;"></div>
-		<div id="container1" style="height: 400px;"></div>
-		<div id="container2" style="height: 400px;"></div>
-		<div id="container3" style="height: 400px;"></div>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="tomorrgod">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>淘宝村</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.11/dijit/themes/claro/claro.css" />
+    <!-- <link rel="stylesheet" href="css/index.css"> -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <!-- <script src="js/index.js"></script> -->
+</head>
+<style>
+    html,
+body {
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#viewDiv {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+  }
+.header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 10%;
+  }
+
+  .btns {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+  }
+
+  .btn-switch {
+    flex-grow: 4;
+    background-color: rgba(34, 111, 14, 0.5);
+    color: #fff;
+    margin: 1px;
+    width: 50%;
+    padding: 20px;
+    overflow: auto;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.7em;
+  }
+
+  .active-map {
+    color: #fff;
+    background-color: rgba(34, 111, 14, 1);
+  }
+  #chartPanel {
+    background: #ffffff;
+    font: "Avenir Next W00";
+    line-height: 1.5em;
+    overflow: auto;
+    padding: 10px;
+    width: 580px;
+    height: 300px;
+  }
+
+  .chart {
+    height: 280px;
+  }
+</style>
+
+<body onload="init()">
+    <section class="header">
+        <div class="btns">
+            <div class="btn-switch active-map" data-id="0">2014年淘宝村分布</div>
+            <div class="btn-switch" data-id="1">2016年淘宝村分布</div>
+            <div class="btn-switch" data-id="2">2018年淘宝村分布</div>
+        </div>
+    </section>
+    <div id="viewDiv"></div>
+    <div id="chartPanel"><canvas id="chart" class="chart"></canvas></div>
+</body>
+<script>
+    function init() {
+    require([
+        "esri/views/MapView",
+        "esri/widgets/Expand",
+        "esri/WebMap"
+    ], function (MapView, Expand, WebMap) {
+        var webmapids = [
+            "c75e7f226fad45fd8fd4186ba963d5d9",
+            "e93121f9012e4d83a308b457488afc74",
+            "5f01a133049a4cf7b6eb6086e4d7ebac"
+        ];
+
+        /************************************************************
+         * Create multiple WebMap instances
+         ************************************************************/
+        var webmaps = webmapids.map(function (webmapid) {
+            return new WebMap({
+                portalItem: {
+                    // autocasts as new PortalItem()
+                    id: webmapid
+                }
+            });
+        });
+
+        var view = new MapView({
+            map: webmaps[0],
+            container: "viewDiv"
+        });
+        view.when(function () {
+            createchart();
+            // Display the chart in an Expand widget
+            chartExpand = new Expand({
+                expandIconClass: "esri-icon-chart",
+                expandTooltip: "Population pyramid chart",
+                expanded: false,
+                view: view,
+                content: document.getElementById("chartPanel")
+            });
+
+
+
+            // Add our components to the UI
+            view.ui.add(chartExpand, "bottom-left");
+        });
+
+        /************************************************************
+         * Initialize the View with the first WebMap
+         ************************************************************/
+
+
+        document
+            .querySelector(".btns")
+            .addEventListener("click", function (event) {
+                /************************************************************
+                 * On a button click, change the map of the View
+                 ************************************************************/
+                var id = event.target.getAttribute("data-id");
+                if (id) {
+                    var webmap = webmaps[id];
+                    view.map = webmap;
+                    var nodes = document.querySelectorAll(".btn-switch");
+                    for (var idx = 0; idx < nodes.length; idx++) {
+                        var node = nodes[idx];
+                        var mapIndex = node.getAttribute("data-id");
+                        if (mapIndex === id) {
+                            // alert(typeof(id));
+                            if (id === '0') {
+                                createchart();
+                            }
+                            if (id === '1') {
+                                createchart1();
+                            }
+                            if (id === '2') {
+                                createchart2();
+                            }
+                            node.classList.add("active-map");
+                        } else {
+                            node.classList.remove("active-map");
+                        }
+
+                    }
+                }
+            });
+
+
+
+        function createchart() {
+            var ctx = document.getElementById('chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['福建省', '广东省', '河北省', '河南省', '湖北省', '江苏省', '山东省', '四川省', '天津市', '浙江省'],
+                    datasets: [{
+                        label: '2014年各省淘宝村数量',
+                        data: [28, 54, 25, 1, 1, 25, 13, 2, 1, 62],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        function createchart2() {
+            var ctx = document.getElementById('chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['浙江省', '广东省', '江苏省', '山东省', '福建省', '河北省', '河南省', '江西省', '北京市', '天津市', '湖北省', '辽宁省', '安徽省', '四川省', '湖南省', '吉林省', '重庆市', '山西省', '广西省', '贵州省', '宁夏省', '陕西省', '新疆省', '云南省'],
+                    datasets: [{
+                        label: '2018年各省淘宝村数量',
+                        data: [1172, 614, 452, 367, 233, 229, 50, 12, 11, 11, 10, 9, 8, 5, 4, 4, 3, 2, 1, 1, 1, , 1, 1, 1],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        function createchart1() {
+            var ctx = document.getElementById('chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['浙江省', '广东省', '江苏省', '山东省', '福建省', '河北省', '河南省', '天津市', '江西省', '辽宁省', '四川省', '北京市', '湖北省', '吉林省', '宁夏省', '云南省', '湖南省', '安徽省'],
+                    datasets: [{
+                        label: '2016年各省淘宝村数量',
+                        data: [506, 262, 201, 108, 107, 91, 13, 5, 4, 4, 3, 1, 1, 1, 1, 1, 1, 1],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+</script>
+
 </html>
