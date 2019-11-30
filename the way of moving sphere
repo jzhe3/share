@@ -1,0 +1,58 @@
+//注释：(x0,y0):物体的起始点坐标；(vx0,vy0):起始点速度在x，y方向上的分量；k：空气阻力系数（建议0.5）；g:重力加速度；m:物体质量。
+void simulation(){
+	double x0, y0, x1, y1, vx0, vy0, vx1, vy1, v0;
+	double k, g, ax, ay, i, temp, time, m;
+	printf("x=, y =\n");
+	scanf("%lf,%lf", &x0, &y0);
+	printf("Vx = , Vy = \n");
+	scanf("%lf,%lf", &vx0, &vy0);
+	printf("k = \n");
+	scanf("%lf", &k);
+	printf("g=, m=\n");
+	scanf("%lf,%lf", &g, &m);
+	vx1 = vx0;
+	vy1 = vy0;
+	i = 0.1;
+	time = 0;
+	//上升阶段
+	while(vy1 > 0){
+		time += i;
+		v0 = sqrt(vx0*vx0+vy0*vy0);
+		temp = m *v0*v0*v0;
+		ax = -(k*vx0)/temp;
+		ay = -(g+(k*vy0)/temp);
+		x1 = x0 + vx0*i;
+		y1 = y0 + vy0*i;
+		printf("时刻%.2f,物体位置为:(%.3f, %.3f)\n", time, x1, y1);
+		x0 = x1;
+		y0 = y1;
+		vx1 = vx0 +ax*i;
+		vy1 = vy0 + ay*i;
+		if(vy1 > 0){
+			vx0 = vx1;
+			vy0 = vy1;
+		}
+	}
+	//下降阶段
+	time -=i;
+	while(y0 > 0){
+		time += i;
+		v0 = sqrt(vx0*vx0+vy0*vy0);
+		temp = m*v0*v0*v0;
+		ax = -(k*vx0)/temp;
+		if(fabs(g - (k*vy0)/temp)>1e-6)
+			ay = g - (k*vy0)/temp;
+		else
+			ay = 0;
+		x1 = x0 + vx0*i;
+		y1 = y0 + vy0*i;
+		printf("时刻%.2f, 物体位置：(%.3f, %.3f)\n", time, x1, y1);
+		x0 = x1;
+		y0 = y1;
+		vx1 = vx0 + ax*i;
+		vy1 = vy0 - ay*i;
+		vx0 = vx1;
+		vy0 = vy1;
+	}
+}
+//*********************//
